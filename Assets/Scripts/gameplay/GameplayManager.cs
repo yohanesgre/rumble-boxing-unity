@@ -8,10 +8,16 @@ public class GameplayManager : MonoBehaviour
     [SerializeField]
     private GameObject[] ListOfQuestion;
     private int currentQuestionPointerIndex = 0;
+
+    private void Awake()
+    {
+        EventHandling.EventUtils.AddListener(EventConstants.OnButtonAnswerClicked, OnButtonAnswerClicked);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        EventHandling.EventUtils.AddListener(EventConstants.OnButtonAnswerClicked, OnButtonAnswerClicked);
+        Debug.Log("GamePlayManager Dispatch Question Init | " + ListOfQuestion.Length);
         EventHandling.EventUtils.DispatchEvent(EventConstants.OnQuestionInit, ListOfQuestion);
     }
 
@@ -34,6 +40,11 @@ public class GameplayManager : MonoBehaviour
                 EventHandling.EventUtils.DispatchEvent(EventConstants.OnAnswerFalse, question);
                 currentQuestionPointerIndex = 0;
             }
+        }
+        else
+        {
+            EventHandling.EventUtils.DispatchEvent(EventConstants.OnPlayerCorrect, 20);
+            //currentQuestionPointerIndex = 0;
         }
     }
 

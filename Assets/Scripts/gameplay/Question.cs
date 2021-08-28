@@ -38,10 +38,15 @@ public class Question : MonoBehaviour
     public string Name { get => questionName; set => questionName = value; }
     public Color TextColor { get => textColor; set => textColor = value; }
 
-    private void Start()
+    private void Awake()
     {
         EventHandling.EventUtils.AddListener(EventConstants.OnAnswerCorrect, OnAnswerCorrect);
         EventHandling.EventUtils.AddListener(EventConstants.OnAnswerFalse, OnAnswerFalse);
+    }
+
+    private void Start()
+    {
+        
     }
 
     private void OnAnswerCorrect(EventHandling.EventArgs eventArgs)

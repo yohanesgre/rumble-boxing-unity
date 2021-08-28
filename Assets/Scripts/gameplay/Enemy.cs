@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,6 +16,18 @@ public class Enemy : MonoBehaviour
     public string Name { get => enemyName; set => enemyName = value; }
     public int HealthPoint { get => healthPoint; set => healthPoint = value; }
 
+    private void Awake()
+    {
+        EventHandling.EventUtils.AddListener(EventConstants.OnPlayerCorrect, DamageEnemy);
+    }
+
+    private void DamageEnemy(EventHandling.EventArgs eventArgs)
+    {
+        var damage = Convert.ToInt32(eventArgs.args[0]);
+        healthPoint -= damage;
+        EventHandling.EventUtils.DispatchEvent(EventConstants.OnEnemyHealthPointUpdate, healthPoint);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,5 +38,10 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         
+    }
+
+    private void OnDestroy()
+    {
+        EventHandling.EventUtils.RemoveListener(EventConstants.OnPlayerCorrect, DamageEnemy);
     }
 }
