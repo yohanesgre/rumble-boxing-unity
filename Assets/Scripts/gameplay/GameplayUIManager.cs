@@ -36,7 +36,6 @@ public class GameplayUIManager : MonoBehaviour
 
     private void Awake()
     {
-        EventHandling.EventUtils.AddListener(EventConstants.OnQuestionInit, OnQuestionInit);
         EventHandling.EventUtils.AddListener(EventConstants.OnQuestionUpdate, OnQuestionUpdate);
         EventHandling.EventUtils.AddListener(EventConstants.OnEnemyHealthPointUpdate, OnEnemyHealthPointUpdate);
         EventHandling.EventUtils.AddListener(EventConstants.OnPlayerHealthPointUpdate, OnPlayerHealthPointUpdate);
@@ -72,50 +71,41 @@ public class GameplayUIManager : MonoBehaviour
         });
     }
 
-    private void OnQuestionInit(EventHandling.EventArgs eventArgs)
+    private void OnQuestionUpdate(EventHandling.EventArgs eventArgs)
     {
-        Debug.Log("OnQuestionInit eventArts length: " + eventArgs.args.Length);
-        for (int i = 0; i < eventArgs.args.Length; i++)
+        if (eventArgs.args != null && eventArgs.args.Length > 0)
         {
-            var question = (eventArgs.args[i] as GameObject).GetComponent<Question>();
-            Debug.Log("OnQuestionInit Question Name: " + question.Name);
-            switch (i)
+            var question = eventArgs.args[0] as QuestionModel;
+            var index = Convert.ToInt32(eventArgs.args[1]);
+            Debug.Log("QuestionUpdate question: " + question.Name + " | " + question.TextColor);
+            switch (index)
             {
                 case 0:
                     question1.text = question.Name;
+                    question1.color = question.TextColor;
                     break;
                 case 1:
                     question2.text = question.Name;
+                    question2.color = question.TextColor;
                     break;
                 case 2:
                     question3.text = question.Name;
+                    question3.color = question.TextColor;
                     break;
                 case 3:
                     question4.text = question.Name;
+                    question4.color = question.TextColor;
                     break;
             }
         }
-    }
-
-    private void OnQuestionUpdate(EventHandling.EventArgs eventArgs)
-    {
-        var question = eventArgs.args[0] as Question;
-        Debug.Log("QuestionUpdate question: " + question.Name);
-        switch (question.Name)
+        else
         {
-            case "A":
-                question1.color = question.TextColor;
-                break;
-            case "B":
-                question2.color = question.TextColor;
-                break;
-            case "C":
-                question3.color = question.TextColor;
-                break;
-            case "D":
-                question4.color = question.TextColor;
-                break;
+            question1.color = Color.black;
+            question2.color = Color.black;
+            question3.color = Color.black;
+            question4.color = Color.black;
         }
+
     }
 
     private void OnEnemyHealthPointUpdate(EventHandling.EventArgs eventArgs)
@@ -146,7 +136,6 @@ public class GameplayUIManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        EventHandling.EventUtils.RemoveListener(EventConstants.OnQuestionInit, OnQuestionInit);
         EventHandling.EventUtils.RemoveListener(EventConstants.OnQuestionUpdate, OnQuestionUpdate);
         EventHandling.EventUtils.RemoveListener(EventConstants.OnEnemyHealthPointUpdate, OnEnemyHealthPointUpdate);
         buttonA.onClick.RemoveAllListeners();

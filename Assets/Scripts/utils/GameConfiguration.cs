@@ -10,9 +10,7 @@ public class GameConfiguration : ScriptableObject
     public string SceneNameGameplay { get { return _sceneNameGameplay; } }
 
     // Gameplay - Local Player
-    //public int StartingGold { get { return _startingGold; } }
-    //public int MaxGoldCount { get { return _maxGoldCount; } }
-    //public float GoldPerSecond { get { return _goldPerSecond; } }
+    public int GameRounds { get { return _gameRounds; } }
 
     // Audio
     //public bool IsAudioEnabled { get { return _isAudioEnabled; } }
@@ -23,12 +21,12 @@ public class GameConfiguration : ScriptableObject
     [SerializeField] private string _sceneNameMainMenu = "MainMenu";
     [SerializeField] private string _sceneNameGameplay = "Gameplay";
 
-    //[Header("Gameplay - Local Player")]
+    [Header("Gameplay - Local Player")]
     /// <summary>
     /// Starting gold count.
     /// </summary>
-    //[Range(1, 3)]
-    //[SerializeField] private int _startingGold = 3;
+    [Range(5, 10)]
+    [SerializeField] private int _gameRounds = 5;
 
     /// <summary>
     /// Maximum gold a user can have at a time.

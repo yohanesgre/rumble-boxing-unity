@@ -11,8 +11,10 @@ public static class EventConstants
     #endregion
 
     #region EVENT_GAMEPLAY
-    public const string OnQuestionInit = "ON_QUESTION_INIT";
+    public const string OnQuestionsInit = "ON_QUESTION_INIT";
     public const string OnQuestionUpdate = "ON_QUESTION_UPDATE";
+    public const string OnGameInitialized = "ON_GAME_INITIALIZED";
+    public const string OnGameRoundUpdate = "ON_GAME_ROUND_UPDATE";
     #endregion
 
     #region EVENT_QUESTION
@@ -26,5 +28,6 @@ public static class EventConstants
 
     #region EVENT_PLAYER
     public const string OnPlayerCorrect = "ON_PLAYER_CORRECT";
+    public const string OnPlayerLocalReady = "ON_PLAYER_LOCAL_READY";
     #endregion
 }

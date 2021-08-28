@@ -1323,6 +1323,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 813411069}
   m_CullTransparentMesh: 0
+--- !u!1 &895855729
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 895855731}
+  - component: {fileID: 895855730}
+  m_Layer: 0
+  m_Name: GameConfigurationManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &895855730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 895855729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b219bb83980b29f47a474a76b37b71a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameConfiguration: {fileID: 11400000, guid: e9e4ad3888023ad4eb9ae1414f6ee6e6, type: 2}
+--- !u!4 &895855731
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 895855729}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &927743943
 GameObject:
   m_ObjectHideFlags: 0
@@ -1532,11 +1576,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a46e6277f78d864a8c5fb2e6eb48eac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ListOfQuestion:
-  - {fileID: 1490959879}
-  - {fileID: 1995279177}
-  - {fileID: 1216474250}
-  - {fileID: 1224045865}
+  _connection: {fileID: 11400000, guid: 3b1803a32f369864f82a3481b22b69a9, type: 2}
+  questionManager: {fileID: 1295491894}
+  isPlaying: 0
 --- !u!1 &1025459101
 GameObject:
   m_ObjectHideFlags: 0
@@ -2091,6 +2133,56 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1237771148}
   m_CullTransparentMesh: 0
+--- !u!1 &1295491892
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1295491893}
+  - component: {fileID: 1295491894}
+  m_Layer: 0
+  m_Name: QuestionManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1295491893
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1295491892}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1295491894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1295491892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19df1ae4e84377a44a2a12a76855fc12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  listOfQuestionGameObject:
+  - {fileID: 1490959879}
+  - {fileID: 1995279177}
+  - {fileID: 1216474250}
+  - {fileID: 1224045865}
+  currentQuestionPointerIndex: 0
+  currentRound: 0
 --- !u!1 &1346773664
 GameObject:
   m_ObjectHideFlags: 0

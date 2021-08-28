@@ -21,6 +21,7 @@ public class GameConnection : ScriptableObject
         _socket = socket;
         Account = account;
         Session = session;
+        BattleConnection = new BattleConnection();
     }
 
 }
