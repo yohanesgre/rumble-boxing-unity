@@ -7,36 +7,14 @@ using UnityEngine.UI;
 public class Question : MonoBehaviour
 {
     [SerializeField]
-    private string questionName;
-    [SerializeField]
-    private float red, green, blue, alpha;
-    [SerializeField]
-    private Color textColor;
+    private QuestionModel questionModel;
 
-    public Question(
-        string name,
-        float red = 0,
-        float green = 0,
-        float blue = 0,
-        float alpha = 1)
+    public QuestionModel QuestionModel { get => questionModel; set => questionModel = value; }
+
+    public Question()
     {
-        this.questionName = name;
-        this.red = red;
-        this.green = green;
-        this.blue = blue;
-        this.alpha = alpha;
+        this.QuestionModel = new QuestionModel();
     }
-
-    public Question(
-        string name,
-        Color textColor)
-    {
-        this.questionName = name;
-        this.TextColor = textColor;
-    }
-
-    public string Name { get => questionName; set => questionName = value; }
-    public Color TextColor { get => textColor; set => textColor = value; }
 
     private void Awake()
     {
@@ -46,24 +24,26 @@ public class Question : MonoBehaviour
 
     private void Start()
     {
-        
+
     }
 
     private void OnAnswerCorrect(EventHandling.EventArgs eventArgs)
     {
-        var question = eventArgs.args[0] as Question;
-        if (question.Name == questionName)
+        var questionModel = eventArgs.args[0] as QuestionModel;
+        var index = Convert.ToInt32(eventArgs.args[1]);
+        var currentRound = Convert.ToInt32(eventArgs.args[2]);
+        //Debug.LogFormat("questionModel.Name: {0} | this.QuestionModel.Name: {1}", questionModel.Name, this.QuestionModel.Name);
+        if (questionModel.Name == this.QuestionModel.Name)
         {
-            TextColor = Color.green;
-            EventHandling.EventUtils.DispatchEvent(EventConstants.OnQuestionUpdate, this);
+            this.QuestionModel.TextColor = Color.green;
+            Debug.LogFormat("QuestionCorrectTextColor: {0}", this.QuestionModel.TextColor);
+            EventHandling.EventUtils.DispatchEvent(EventConstants.OnQuestionUpdate, this.QuestionModel, index);
         }
     }
 
     private void OnAnswerFalse(EventHandling.EventArgs eventArgs)
     {
-        var question = eventArgs.args[0] as Question;
-        TextColor = Color.black;
-        EventHandling.EventUtils.DispatchEvent(EventConstants.OnQuestionUpdate, this);
+        EventHandling.EventUtils.DispatchEvent(EventConstants.OnQuestionUpdate);
     }
 
     private void OnDestroy()
@@ -72,3 +52,4 @@ public class Question : MonoBehaviour
         EventHandling.EventUtils.RemoveListener(EventConstants.OnAnswerFalse, OnAnswerFalse);
     }
 }
+

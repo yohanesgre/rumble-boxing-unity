@@ -6,7 +6,7 @@ using System.IO.Compression;
 using System.Text;
 using UnityEngine;
 
-public static class StringShortener
+public static class ValueUtils
 {
     public static string ShortenGuid(string _guid)
     {
@@ -22,5 +22,13 @@ public static class StringShortener
         string base64 = shortGuid.Replace('-', '+').Replace('_', '/') + "==";
         Byte[] bytes = Convert.FromBase64String(base64);
         return new Guid(bytes).ToString() + ".";
+    }
+
+    [Obsolete]
+    public static char GetRandomQuestionChar()
+    {
+        string chars = "ABCD";
+        int num = UnityEngine.Random.RandomRange(0, chars.Length);
+        return chars[num];
     }
 }

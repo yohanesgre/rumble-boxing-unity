@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,6 +12,7 @@ public class MainMenuManager : MonoBehaviour
 {
     [Header("Network")]
     [SerializeField] private GameConnection _connection;
+    [SerializeField] private List<IUserPresence> connectedPlayers = new List<IUserPresence>(2);
 
     [Header("Menu Containers")]
     [SerializeField] private GameObject menuMain;
@@ -52,6 +54,7 @@ public class MainMenuManager : MonoBehaviour
         {
             HideMainMenu();
             ShowMenuQuickMatch();
+            StartQuickMatch();
         });
 
         buttonClosePrivateMatch.onClick.AddListener(() =>
@@ -63,6 +66,7 @@ public class MainMenuManager : MonoBehaviour
         buttonCancelFindMatch.onClick.AddListener(() =>
         {
             HideMenuQuickMatch();
+            StopQuickMatch();
             ShowMenuMain();
         });
 
@@ -78,7 +82,7 @@ public class MainMenuManager : MonoBehaviour
                 LeavePrivateMatch();
                 buttonCreateMatch.gameObject.GetComponentInChildren<Text>().text = "Create";
             }
-           
+
         });
 
         buttonJoinMatch.onClick.AddListener(() =>
@@ -204,6 +208,7 @@ public class MainMenuManager : MonoBehaviour
         try
         {
             // Acquires matchmaking ticket used to join a match
+            Debug.Log("start matchmaking");
             _ticket = await _connection.Socket.AddMatchmakerAsync(
                 query: "*",
                 minCount: 2,
@@ -218,10 +223,60 @@ public class MainMenuManager : MonoBehaviour
         }
     }
 
+    private void OnMatchmakerMatched(IMatchmakerMatched matched)
+    {
+        Debug.Log("matchmaker matched called");
+        _self = matched.Self.Presence;
+        connectedPlayers.Add(_self);
+        _connection.BattleConnection.Self = _self;
+        _connection.BattleConnection.MatchId = matched.MatchId;
+        _connection.Socket.ReceivedMatchmakerMatched -= OnMatchmakerMatched;
+
+        JoinMatchedMatch();
+    }
+
+    private async void JoinMatchedMatch(IMatchmakerMatched matched = null)
+    {
+        _connection.Socket.ReceivedMatchPresence += WaitPlayerToJoinMatchedMatch;
+        if (matched != null)
+        {
+            IMatch match = await _connection.Socket.JoinMatchAsync(matched);
+        }
+    }
+
+    private void WaitPlayerToJoinMatchedMatch(IMatchPresenceEvent presenceEvent)
+    {
+        Debug.Log("WaitPlayerToJoinMatchedMatch");
+        if (presenceEvent.Joins.Count() > 0)
+        {
+            foreach (var presence in presenceEvent.Joins)
+            {
+                connectedPlayers.Add(presence);
+            }
+        }
+        else if (presenceEvent.Leaves.Count() > 0)
+        {
+            foreach (var presence in presenceEvent.Leaves)
+            {
+                connectedPlayers.Remove(presence);
+            }
+        }
+        if (connectedPlayers.Count() >= 2)
+        {
+            _connection.BattleConnection.HostId = connectedPlayers.First().UserId;
+            connectedPlayers.Remove(_self);
+            _connection.BattleConnection.Opponents = connectedPlayers;
+            _connection.Socket.ReceivedMatchPresence -= WaitPlayerToJoinMatchedMatch;
+            Debug.Log("Load Gameplay");
+            SceneManager.LoadScene(GameConfigurationManager.Instance.GameConfiguration.SceneNameGameplay);
+        }
+    }
+
     public async void StopQuickMatch(bool isMuteSoundManager = false)
     {
         try
         {
+            ResetBattleConnection();
             await _connection.Socket.RemoveMatchmakerAsync(_ticket);
         }
         catch (Exception e)
@@ -233,54 +288,71 @@ public class MainMenuManager : MonoBehaviour
         _ticket = null;
     }
 
-    private void OnMatchmakerMatched(IMatchmakerMatched matched)
-    {
-        _connection.BattleConnection = new BattleConnection(matched);
-        _connection.Socket.ReceivedMatchmakerMatched -= OnMatchmakerMatched;
-
-        Debug.Log("matchmaker matched called");
-
-        SceneManager.LoadScene(GameConfigurationManager.Instance.GameConfiguration.SceneNameGameplay);
-    }
-
     private async void CreatePrivateMatch()
     {
         _privateMatch = await _connection.Socket.CreateMatchAsync();
-        Debug.LogFormat("New match with id '{0}', {1}", _privateMatch.Id, StringShortener.ShortenGuid(_privateMatch.Id));
-        textMatchCode.text = StringShortener.ShortenGuid(_privateMatch.Id);
+        textMatchCode.text = _privateMatch.Id;
+        JoinPrivateMatch(_privateMatch.Id);
+    }
+    private async void JoinPrivateMatch(String _matchId = "")
+    {
+        var matchId = !String.IsNullOrEmpty(_matchId) ? _matchId: inputMatchCode.text;
+        var match = await _connection.Socket.JoinMatchAsync(matchId);
+        foreach (var presence in match.Presences)
+        {
+            _self = presence;
+            connectedPlayers.Add(_self);
+            _connection.BattleConnection.Self = _self;
+            _connection.BattleConnection.HostId = _self.UserId;
+            _connection.BattleConnection.MatchId = match.Id;
+            Debug.LogFormat("JoinPrivateMatch {0} | {1}", connectedPlayers.Count(), _self.UserId);
+        }
+
+        _connection.Socket.ReceivedMatchPresence += WaitPlayerToJoinPrivateMatch;
     }
 
     private async void LeavePrivateMatch()
     {
+        _connection.Socket.ReceivedMatchPresence -= WaitPlayerToJoinPrivateMatch;
         await _connection.Socket.LeaveMatchAsync(_privateMatch);
+        ResetBattleConnection();
         textMatchCode.text = "";
         _privateMatch = null;
     }
 
-    private async void JoinPrivateMatch()
+    private void WaitPlayerToJoinPrivateMatch(IMatchPresenceEvent presenceEvent)
     {
-        var matchId = StringShortener.ParseShortGuid(inputMatchCode.text);
-        Debug.LogFormat("Join match id {0}", matchId);
-        var match = await _connection.Socket.JoinMatchAsync(matchId);
-        foreach (var presence in match.Presences)
+        if (presenceEvent.Joins.Count() > 0)
         {
-
-            Debug.LogFormat("User id '{0}' name '{1}'.", presence.UserId, presence.Username);
-            _self = presence;
+            foreach (var presence in presenceEvent.Joins)
+            {
+                connectedPlayers.Add(presence);
+            }
         }
-
-        var connectedOpponents = new List<IUserPresence>(2);
-        _connection.Socket.ReceivedMatchPresence += presenceEvent =>
+        else if (presenceEvent.Leaves.Count() > 0)
         {
             foreach (var presence in presenceEvent.Leaves)
             {
-                connectedOpponents.Remove(presence);
+                connectedPlayers.Remove(presence);
             }
-            connectedOpponents.AddRange(presenceEvent.Joins);
-            // Remove yourself from connected opponents.
-            connectedOpponents.Remove(_self);
-            Debug.LogFormat("Connected opponents: [{0}]", string.Join(",\n  ", connectedOpponents));
-        };
+        }
+
+        if (connectedPlayers.Count() >= 2)
+        {
+            connectedPlayers.Remove(_self);
+            _connection.BattleConnection.Opponents = connectedPlayers;
+            _connection.Socket.ReceivedMatchPresence -= WaitPlayerToJoinPrivateMatch;
+            SceneManager.LoadScene(GameConfigurationManager.Instance.GameConfiguration.SceneNameGameplay);
+        }
+    }
+
+    private void ResetBattleConnection()
+    {
+        connectedPlayers.Clear();
+        _connection.BattleConnection.Self = null;
+        _connection.BattleConnection.Opponents = null;
+        _connection.BattleConnection.HostId = "";
+        _connection.BattleConnection.MatchId = "";
     }
 
     private void ShowMenuMain()

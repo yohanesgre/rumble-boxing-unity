@@ -7,11 +7,12 @@ public class BattleConnection
 {
 	public string MatchId { get; set; }
 	public string HostId { get; set; }
-	public string OpponentId { get; set; }
-	public IMatchmakerMatched Matched { get; set; }
+	public IUserPresence Self { get; set; }
+	public List<IUserPresence> Opponents { get; set; }
 
-	public BattleConnection(IMatchmakerMatched matched)
+	public BattleConnection(IUserPresence self = null, List<IUserPresence> opponents = null)
 	{
-		Matched = matched;
+		Self = self;
+		Opponents = opponents;
 	}
 }
