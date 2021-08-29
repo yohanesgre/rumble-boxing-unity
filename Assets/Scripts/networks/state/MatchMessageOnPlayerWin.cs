@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MatchMessageOnPlayerDead : MatchMessage<MatchMessageOnPlayerDead>
+public class MatchMessageOnPlayerWin : MatchMessage<MatchMessageOnPlayerWin>
 {
 	public readonly string PlayerId;
 
-	public MatchMessageOnPlayerDead(string playerId)
+	public MatchMessageOnPlayerWin(string playerId)
 	{
 		PlayerId = playerId;
 	}

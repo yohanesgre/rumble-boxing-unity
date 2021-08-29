@@ -6,7 +6,7 @@ public class MatchMessageOnGameOver : MatchMessage<MatchMessageOnGameOver>
 {
 	public readonly string WinnerPlayerId;
 
-	public MatchMessageOnGameOver(string winnerPlayerId, int enemyId, int damage)
+	public MatchMessageOnGameOver(string winnerPlayerId)
 	{
 		WinnerPlayerId = winnerPlayerId;
 	}

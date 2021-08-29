@@ -10,11 +10,11 @@ public class Player : MonoBehaviour
     [SerializeField]
     private string playerName;
     [SerializeField]
-    private int healthPoint;
+    private float healthPoint;
 
     public string Id { get => id; set => id = value; }
     public string Name { get => playerName; set => playerName = value; }
-    public int HealthPoint { get => healthPoint; set => healthPoint = value; }
+    public float HealthPoint { get => healthPoint; set => healthPoint = value; }
 
 
 
@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
 
     private void DamagePlayer(EventHandling.EventArgs eventArgs)
     {
-        var damage = Convert.ToInt32(eventArgs.args[0]);
+        var damage = (float)eventArgs.args[0];
         healthPoint -= damage;
         EventHandling.EventUtils.DispatchEvent(EventConstants.OnPlayerHealthPointUpdate, healthPoint);
     }
