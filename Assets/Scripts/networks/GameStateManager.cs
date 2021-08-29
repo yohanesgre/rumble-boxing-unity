@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 public class GameStateManager
 {
     public event Action<MatchMessageOnPlayerCorrect> OnPlayerCorrect;
-    public event Action<MatchMessageOnPlayerDead> OnPlayerDead;
+    public event Action<MatchMessageOnPlayerWin> OnPlayerWin;
     public event Action<MatchMessageOnPlayerReady> OnPlayerReady;
     public event Action<MatchMessageOnGameInitialized> OnGameInitialized;
     public event Action<MatchMessageOnGameOver> OnGameOver;
@@ -85,8 +85,8 @@ public class GameStateManager
             case MatchMessageType.PlayerCorrect:
                 OnPlayerCorrect?.Invoke(message as MatchMessageOnPlayerCorrect);
                 break;
-            case MatchMessageType.PlayerDead:
-                OnPlayerDead?.Invoke(message as MatchMessageOnPlayerDead);
+            case MatchMessageType.PlayerWin:
+                OnPlayerWin?.Invoke(message as MatchMessageOnPlayerWin);
                 break;
             default:
                 break;
@@ -114,9 +114,9 @@ public class GameStateManager
                 MatchMessageOnPlayerCorrect matchMessageOnPlayerCorrect = MatchMessageOnPlayerCorrect.Parse(messageJson);
                 OnPlayerCorrect?.Invoke(matchMessageOnPlayerCorrect);
                 break;
-            case MatchMessageType.PlayerDead:
-                MatchMessageOnPlayerDead matchMessageOnPlayerDead = MatchMessageOnPlayerDead.Parse(messageJson);
-                OnPlayerDead?.Invoke(matchMessageOnPlayerDead);
+            case MatchMessageType.PlayerWin:
+                MatchMessageOnPlayerWin matchMessageOnPlayerDead = MatchMessageOnPlayerWin.Parse(messageJson);
+                OnPlayerWin?.Invoke(matchMessageOnPlayerDead);
                 break;
             default:
                 break;

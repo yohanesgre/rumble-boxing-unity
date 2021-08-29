@@ -110,20 +110,27 @@ public class GameplayUIManager : MonoBehaviour
 
     private void OnEnemyHealthPointUpdate(EventHandling.EventArgs eventArgs)
     {
-        var enemyHp = Convert.ToInt32(eventArgs.args[0]);
+        var enemyHp = (float)eventArgs.args[0];
         if (enemyHp >= 0)
         {
             sliderEnemyHp.value = (float)enemyHp / 100;
+        }else
+        {
+            sliderEnemyHp.value = 0;
         }
         Debug.Log("OnEnemyHealthPointUpdate enemyHP: " + enemyHp + " | sliderEnemyHp: " + sliderEnemyHp.value);
     }
 
     private void OnPlayerHealthPointUpdate(EventHandling.EventArgs eventArgs)
     {
-        var playerHp = Convert.ToInt32(eventArgs.args[0]);
+        var playerHp = (float)eventArgs.args[0];
         if (playerHp >= 0)
         {
             playerSliderHp.value = (float)playerHp / 100;
+        }
+        else
+        {
+            playerSliderHp.value = 0;
         }
         Debug.Log("OnPlayerHealthPointUpdate playerHp: " + playerHp + " | playerSliderHp: " + playerSliderHp.value);
     }

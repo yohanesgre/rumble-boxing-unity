@@ -29,5 +29,6 @@ public static class EventConstants
     #region EVENT_PLAYER
     public const string OnPlayerCorrect = "ON_PLAYER_CORRECT";
     public const string OnPlayerLocalReady = "ON_PLAYER_LOCAL_READY";
+    public const string OnSendPlayerCorrect = "ON_SEND_PLAYER_CORRECT";
     #endregion
 }

@@ -31,7 +31,6 @@ public class Question : MonoBehaviour
     {
         var questionModel = eventArgs.args[0] as QuestionModel;
         var index = Convert.ToInt32(eventArgs.args[1]);
-        var currentRound = Convert.ToInt32(eventArgs.args[2]);
         //Debug.LogFormat("questionModel.Name: {0} | this.QuestionModel.Name: {1}", questionModel.Name, this.QuestionModel.Name);
         if (questionModel.Name == this.QuestionModel.Name)
         {

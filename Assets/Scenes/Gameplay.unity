@@ -190,6 +190,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1c0730ec5b6e5554582020616fb0bc95, type: 3}
+--- !u!114 &153333408 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4433793081298823671, guid: 1c0730ec5b6e5554582020616fb0bc95,
+    type: 3}
+  m_PrefabInstance: {fileID: 153333407}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5da08d903397d9346a2e90372672830f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &320397378
 GameObject:
   m_ObjectHideFlags: 0
@@ -1578,7 +1590,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _connection: {fileID: 11400000, guid: 3b1803a32f369864f82a3481b22b69a9, type: 2}
   questionManager: {fileID: 1295491894}
+  player: {fileID: 2133353523}
+  enemy: {fileID: 153333408}
   isPlaying: 0
+  isWinner: 0
+  isOver: 0
+  maxRounds: 1
+  currentRound: 1
 --- !u!1 &1025459101
 GameObject:
   m_ObjectHideFlags: 0
@@ -1956,12 +1974,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6995ed800bc713f4b8ca3f8cdb6fd7ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  questionName: C
-  red: 0
-  green: 0
-  blue: 0
-  alpha: 1
-  textColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &1224045865
 GameObject:
   m_ObjectHideFlags: 0
@@ -2053,12 +2065,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6995ed800bc713f4b8ca3f8cdb6fd7ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  questionName: D
-  red: 0
-  green: 0
-  blue: 0
-  alpha: 1
-  textColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &1237771148
 GameObject:
   m_ObjectHideFlags: 0
@@ -2182,7 +2188,7 @@ MonoBehaviour:
   - {fileID: 1216474250}
   - {fileID: 1224045865}
   currentQuestionPointerIndex: 0
-  currentRound: 0
+  currentRound: 1
 --- !u!1 &1346773664
 GameObject:
   m_ObjectHideFlags: 0
@@ -2447,12 +2453,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6995ed800bc713f4b8ca3f8cdb6fd7ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  questionName: A
-  red: 0
-  green: 0
-  blue: 0
-  alpha: 1
-  textColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &1495581979
 GameObject:
   m_ObjectHideFlags: 0
@@ -3084,12 +3084,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6995ed800bc713f4b8ca3f8cdb6fd7ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  questionName: B
-  red: 0
-  green: 0
-  blue: 0
-  alpha: 1
-  textColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &2022892654
 GameObject:
   m_ObjectHideFlags: 0
@@ -3386,3 +3380,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: adf31e51392ba2d46a24e8bd66c99b1e, type: 3}
+--- !u!114 &2133353523 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5376987290732958963, guid: adf31e51392ba2d46a24e8bd66c99b1e,
+    type: 3}
+  m_PrefabInstance: {fileID: 2133353522}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 615efd0c755b03640a227a54e0d39847, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
